@@ -13,7 +13,7 @@ on:
 # 실행될 작업(Job)들
 jobs:
   # 빌드 및 테스트를 담당하는 메인 작업
-  build-and-test:
+  build:
     # 가상 환경 지정
     runs-on: ubuntu-latest
 
