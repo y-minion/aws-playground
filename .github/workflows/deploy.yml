@@ -23,12 +23,18 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy to EC2
-        run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "
-            cd ~/aws-playground &&
-            git pull &&
-            npm install &&
-            npm run build &&
-            pm2 reload 0
-          "
+      - name: Deploy to EC2 using appleboy/ssh-action
+        uses: appleboy/ssh-action@v1
+        with:
+          # 🌟 1. 접속 정보
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          # 🌟 2. 원격 실행 스크립트 (하나의 블록으로 깔끔하게 정리)
+          script: |
+            cd ~/YOUR_PROJECT_DIRECTORY || exit 1
+            git pull origin main
+            /usr/bin/npm install
+            /usr/bin/npm run build
+            /usr/bin/pm2 reload 0
