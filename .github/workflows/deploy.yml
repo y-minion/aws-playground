@@ -35,6 +35,10 @@ jobs:
           script: |
             NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
 
+            export PATH="$NVM_BIN_PATH:$PATH"
+
+            echo "New PATH: $PATH"
+
             cd ~/aws-playground || exit 1
             git pull origin main
             $NVM_BIN_PATH/npm install
