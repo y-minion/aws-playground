@@ -38,7 +38,7 @@ jobs:
 
             export PATH="$NVM_BIN_PATH:$PATH"
 
-            cd ~/YOUR_PROJECT_DIRECTORY || exit 1
+            cd ~/aws-playground || exit 1
 
             echo "--- 1. GIT PULL ---"
             git pull origin main || exit 1
