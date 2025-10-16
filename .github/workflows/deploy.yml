@@ -30,7 +30,6 @@ jobs:
         run: |
           tar -czf artifact.tar.gz \
             .next \
-            public \
             package.json \
             package-lock.json
 
