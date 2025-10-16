@@ -23,6 +23,7 @@ jobs:
         run: |
           npm install
           npm run build
+          ls -al
 
       # 🚨 핵심: 빌드 결과물을 압축 파일 하나로 묶기
       - name: Compress Build Artifacts
