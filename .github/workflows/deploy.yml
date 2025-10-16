@@ -113,6 +113,7 @@ jobs:
             else
               echo "Service found. Reloading..."
               pm2 reload test-app
+            fi
 
             set +x
             exit 0
