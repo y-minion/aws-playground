@@ -30,6 +30,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 30m
 
           # 🌟 2. 원격 실행 스크립트 (하나의 블록으로 깔끔하게 정리)
           script: |
@@ -37,10 +38,18 @@ jobs:
 
             export PATH="$NVM_BIN_PATH:$PATH"
 
-            echo "New PATH: $PATH"
+            cd ~/YOUR_PROJECT_DIRECTORY || exit 1
 
-            cd ~/aws-playground || exit 1
-            git pull origin main
-            npm install
-            npm run build
-            pm2 reload 0
+            echo "--- 1. GIT PULL ---"
+            git pull origin main || exit 1
+
+            echo "--- 2. NPM INSTALL ---"
+            npm install || exit 1 
+
+            echo "--- 3. NPM BUILD ---"
+            npm run build || exit 1
+
+            echo "--- 4. PM2 RELOAD ---"
+            pm2 reload 0 || exit 1
+
+            echo "Deployment Finalized."
