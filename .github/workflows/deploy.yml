@@ -105,7 +105,14 @@ jobs:
             sar -d -f ~/sar_history.log # 디스크 I/O (선택적)
 
             echo "--- 3. NPM INSTALL FINISHED ---" # 이 메시지가 출력되는지 확인
-            pm2 reload 0 || exit 1
+            pm2 describe test-app > /dev/null 2>&1
+
+            if [ $? -ne 0 ]; then
+              echo "Service not found. Starting PM2 for the first time..."
+              pm2 start npm --name 'test-app' -- start
+            else
+              echo "Service found. Reloading..."
+              pm2 reload test-app
 
             set +x
             exit 0
