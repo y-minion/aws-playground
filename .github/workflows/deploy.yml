@@ -6,24 +6,60 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Setup Known Hosts
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Setup Node.js and Cache
+        uses: actions/setup-node@v6
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          node-version: "22"
+          # npm install 속도 향상을 위한 캐시 (Optional)
+          cache: "npm"
 
-      - name: Deploy to EC2 using appleboy/ssh-action
+      - name: Install Dependencies & Build Project
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Supabase-Next.js-artifact #Supabase-Next.js-artifact이름으로 압축 업로드
+          path: |
+            .next
+            public
+            package.json
+            package-lock.json
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # - name: Setup Known Hosts
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      #     chmod 644 ~/.ssh/known_hosts
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Supabase-Next.js-artifact # 다운받을 아티팩트 지정
+          path: ./download/ # 압축 해제할 경로 지정
+
+      - name: Transfer Artifacts to EC2 via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          source: "./download/.next/*,./download/public/*,./download/package.json,./download/package-lock.json"
+          target: "~/aws-playground"
+
+      - name: Restart Service via SSH
         uses: appleboy/ssh-action@v1
         with:
           # 🌟 1. 접속 정보
@@ -39,19 +75,5 @@ jobs:
             export PATH="$NVM_BIN_PATH:$PATH"
 
             cd ~/aws-playground || exit 1
-
-            echo "--- 1. GIT PULL ---"
-            git pull origin main || exit 1
-
-            echo "--- 2. NPM INSTALL ---"
-            npm install || exit 1 
-
-            echo "--- 3. NPM BUILD ---"
-            npm run build || exit 1
-
-            echo "--- 4. PM2 RELOAD ---"
+            npm install
             pm2 reload 0 || exit 1
-
-            echo "Deployment Finalized."
-            echo "Remote command execution finished."
-            exit 0
