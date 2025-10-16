@@ -52,7 +52,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Supabase-Next.js-artifact # 다운받을 아티팩트 지정
-          path: ./download/ # 압축 해제할 경로 지정
 
       - name: Transfer Artifacts to EC2 via SCP
         uses: appleboy/scp-action@v1
@@ -61,7 +60,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-          source: "./download/artifact.tar.gz"
+          source: "./artifact.tar.gz"
           target: "~/aws-playground"
 
       - name: Restart Service via SSH
