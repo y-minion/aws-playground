@@ -62,18 +62,27 @@ jobs:
       - name: Restart Service via SSH
         uses: appleboy/ssh-action@v1
         with:
-          # 🌟 1. 접속 정보
+          # 1. 접속 정보
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           timeout: 30m
 
-          # 🌟 2. 원격 실행 스크립트 (하나의 블록으로 깔끔하게 정리)
+          # 2. 원격 실행 스크립트
           script: |
-            NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
+            set -x # 모든 명령어 실행 전후를 상세히 로깅
 
+            NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
             export PATH="$NVM_BIN_PATH:$PATH"
 
+            echo "--- 1. Directory Change ---"
             cd ~/aws-playground || exit 1
-            npm ci
+
+            echo "--- 2. NPM INSTALL START ---"
+            npm ci # 🌟 npm ci로 변경 권장
+
+            echo "--- 3. NPM INSTALL FINISHED ---" # 이 메시지가 출력되는지 확인
             pm2 reload 0 || exit 1
+
+            set +x
+            exit 0
