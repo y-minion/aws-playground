@@ -83,11 +83,26 @@ jobs:
             echo "--- 1. Directory Change ---"
             cd ~/aws-playground || exit 1
 
+            # 🚨 1. (디버깅) sar 명령을 통해 2초마다 15번 메모리 상태를 백그라운드에 기록
+            # 이 기록이 npm ci 실행 시간대와 겹치게 됩니다.
+            sar -r -n DEV -o ~/sar_history.log 2 15 & 
+            SAR_PID=$!
+
+
             # 🚨 핵심: 전송된 압축 파일을 해제
             tar -xzf artifact.tar.gz
 
             echo "--- 2. NPM INSTALL START ---"
             npm ci # 🌟 npm ci로 변경 권장
+
+
+
+            # 🚨 2. npm ci 완료 후 sar 프로세스 종료 및 로그 파일 확인
+            kill $SAR_PID || true
+
+            echo "--- SAR LOG (MEMORY/SWAP) ---"
+            sar -r -f ~/sar_history.log # 메모리/스와프 사용량 출력
+            sar -d -f ~/sar_history.log # 디스크 I/O (선택적)
 
             echo "--- 3. NPM INSTALL FINISHED ---" # 이 메시지가 출력되는지 확인
             pm2 reload 0 || exit 1
