@@ -53,3 +53,5 @@ jobs:
             pm2 reload 0 || exit 1
 
             echo "Deployment Finalized."
+            echo "Remote command execution finished."
+            exit 0
