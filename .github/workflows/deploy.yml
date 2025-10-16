@@ -75,5 +75,5 @@ jobs:
             export PATH="$NVM_BIN_PATH:$PATH"
 
             cd ~/aws-playground || exit 1
-            npm install
+            npm ci
             pm2 reload 0 || exit 1
