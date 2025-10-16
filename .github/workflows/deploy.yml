@@ -33,10 +33,10 @@ jobs:
 
           # 🌟 2. 원격 실행 스크립트 (하나의 블록으로 깔끔하게 정리)
           script: |
-            source ~/.bashrc || source ~/.profile
+            NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
 
             cd ~/aws-playground || exit 1
             git pull origin main
-            /usr/bin/npm install
-            /usr/bin/npm run build
-            /usr/bin/pm2 reload 0
+            $NVM_BIN_PATH/usr/bin/npm install
+            $NVM_BIN_PATH/usr/bin/npm run build
+            $NVM_BIN_PATH/usr/bin/pm2 reload 0
