@@ -37,6 +37,6 @@ jobs:
 
             cd ~/aws-playground || exit 1
             git pull origin main
-            $NVM_BIN_PATH/usr/bin/npm install
-            $NVM_BIN_PATH/usr/bin/npm run build
-            $NVM_BIN_PATH/usr/bin/pm2 reload 0
+            $NVM_BIN_PATH/npm install
+            $NVM_BIN_PATH/npm run build
+            $NVM_BIN_PATH/pm2 reload 0
