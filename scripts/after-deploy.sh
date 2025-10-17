@@ -4,7 +4,7 @@ cd $REPOSITORY
 
 NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
 
-export PATH = "$NVM_BIN_PATH:$PATH"
+export PATH="$NVM_BIN_PATH:$PATH"
 
 npm install
 
