@@ -24,6 +24,10 @@ jobs:
           npm install
           npm run build
           ls -al
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY: ${{secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY }}
+          SUPABASE_DATABASE_PASSWORD: ${{ secrets.SUPABASE_DATABASE_PASSWORD}}
 
       # 🚨 핵심: 빌드 결과물을 압축 파일 하나로 묶기
       - name: Compress Build Artifacts
