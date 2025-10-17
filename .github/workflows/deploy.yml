@@ -32,7 +32,7 @@ jobs:
       # 🚨 핵심: 빌드 결과물을 압축
       - name: zip file
         run: |
-          zip -r artifact.zip ./.next ./package.json ./package-lock.json ./.env ./scripts ./appspecs.yml
+          zip -r artifact.zip ./.next ./package.json ./package-lock.json ./.env ./scripts ./appspec.yml
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v5
