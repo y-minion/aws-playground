@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/build
+    destination: /home/ubuntu/application
     overwrite: yes
 
 permissions:
@@ -13,6 +13,17 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: scripts/after-deploy.sh
+    # 1. 새 버전의 코드 의존성 설치
+    - location: scripts/after-install.sh
       timeout: 300
       runas: ubuntu
+  ApplicationStart:
+    # 2. 새 버전(그린)을 새로운 포트에 실행
+    - location: scripts/start-server.sh
+      timeout: 300
+      runas: ubuntu
+  ValidateService:
+    - location: scripts/validate_and_switch_and_cleanup.sh
+      timeout: 90
+      runas: root # ⭐️ Nginx 제어 및 pm2 관리를 위해 root 권한 사용 -> 이렇게 되면 변수 설정할 필요가 없다
+
