@@ -14,7 +14,7 @@ GREEN_PORT=$(cat /tmp/green_port.txt)
 echo ">>> [Step 1] Health check for New Green Server on port $GREEN_PORT"
 
 for i in {1..10}; do
-    RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:$GREEN_PORT/health)
+    RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:$GREEN_PORT/health)
     echo ">>> [debug] current code is $RESPONSE_CODE"
 
     if [ "$RESPONSE_CODE" -eq 200 ]; then
