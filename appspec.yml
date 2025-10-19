@@ -16,15 +16,14 @@ hooks:
     # 1. 새 버전의 코드 의존성 설치
     - location: scripts/after_install.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
   ApplicationStart:
     # 2. 새 버전(그린)을 새로운 포트에 실행
     - location: scripts/start_server.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
   ValidateService:
     # 3. 그린 서버 검증 -> 트래픽 전환 -> 구버전(블루) 정리
     - location: scripts/validate_and_switch_and_cleanup.sh
       timeout: 90
-      runas: root # ⭐️ Nginx 제어 및 pm2 관리를 위해 root 권한 사용 -> 이렇게 되면 변수 설정할 필요가 없다
-
+      runas: ubuntu

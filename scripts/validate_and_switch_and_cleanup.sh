@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
+
+export PATH="$NVM_BIN_PATH:$PATH"
+
 if [ ! -f /tmp/green_port.txt ]; then
    echo  ">>> [Error]Could not find port file. The start_server step may have failed."
    exit 1
