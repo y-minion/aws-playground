@@ -18,7 +18,7 @@ for i in {1..10}; do
         IDLE_PORT=$(grep -oP '(?<=:)\d+' /etc/nginx/conf.d/proxy.conf)
 
         echo ">>> [Step 2] Switching Nginx to Green Port: $GREEN_PORT"
-        echo "proxy_pass http://127.0.0.1:$GREEN_PORT;" >> /etc/nginx/conf.d/proxy.conf
+        echo "proxy_pass http://127.0.0.1:$GREEN_PORT;" | sudo tee /etc/nginx/conf.d/proxy.conf
 
         sudo systemctl reload nginx
         echo ">>> [Success] Nginx reloaded. Traffic is now served by Green server."
