@@ -22,7 +22,7 @@ fi
 echo ">>> Blue Port: $CURRENT_BLUE_PORT"
 echo ">>> Green Port (New Server): $GREEN_PORT"
 
-pm2 start "npm run start" --name "app-$GREEN_PORT" -- --port $GREEN_PORT
+PORT=$GREEN_PORT pm2 start "npm run start" --name "app-$GREEN_PORT"
 
 pm2 save
 
