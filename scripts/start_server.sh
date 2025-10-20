@@ -4,9 +4,10 @@ NVM_BIN_PATH="/home/ubuntu/.nvm/versions/node/v22.20.0/bin"
 
 export PATH="$NVM_BIN_PATH:$PATH"
 
-cd /home/ubuntu/application
+cd /home/ubuntu/application || exit 1
 
-if [ ! -f /etc/nginx/conf.d/proxy.conf]; then
+
+if [ ! -f /etc/nginx/conf.d/proxy.conf ]; then
     CURRENT_BLUE_PORT=3001
 else
     CURRENT_BLUE_PORT=$(grep -oP '(?<=:)\d+' /etc/nginx/conf.d/proxy.conf)
